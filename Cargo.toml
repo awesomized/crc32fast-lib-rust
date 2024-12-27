@@ -2,6 +2,13 @@
 name = "crc32fast-lib"
 version = "1.0.0"
 edition = "2021"
+authors = ["Don MacAskill"]
+keywords = ["crc", "crc32", "simd", "checksum", "nvme"]
+categories = ["algorithms", "encoding", "hardware-support"]
+license = "MIT"
+repository = "https://github.com/awesomized/crc32fast-lib-rust"
+description = "Fast, SIMD-accelerated CRC-32/ISO-HDLC (aka 'crc32') checksum computation in Rust exposed as a C-compatible shared library"
+readme = "README.md"
 
 [dependencies]
 crc32fast = "1"
