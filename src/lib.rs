@@ -1,10 +1,36 @@
+// Copyright 2024 Don MacAskill. Licensed under MIT.
+
+//! `crc32fast-lib`
+//! ===============
+//!
+//! Fast, SIMD-accelerated
+//! [CRC-32/ISO-HDLC](https://reveng.sourceforge.io/crc-catalogue/all.htm#crc.cat.crc-32-iso-hdlc)
+//! (aka `crc32`) checksum computation in Rust exposed as a C-compatible shared library.
+//!
+//! Results in a dramatic performance improvement. For example, when
+//! [using it via FFI in PHP](https://github.com/awesomized/crc-fast-php), it's >10X faster than
+//! PHP's native [crc32](https://www.php.net/crc32) implementation.
+//!
+//! ## Usage
+//!
+//! ### PHP example
+//!
+//! ```php
+//! $hasher = $ffi->hasher_new();
+//! $ffi->hasher_write($hasher, 'hello world!', 12);
+//! $checksum = $ffi->hasher_finalize($hasher); // 0x03b4c26d
+//! ```
+//!
+
 use crc32fast::Hasher;
 use std::os::raw::c_char;
 use std::slice;
 
+/// Opaque type for C for use in FFI
 #[repr(C)]
 pub struct HasherHandle(*mut Hasher);
 
+/// Creates a new Hasher to compute CRC32 checksums
 #[no_mangle]
 pub extern "C" fn hasher_new() -> *mut HasherHandle {
     let hasher = Box::new(Hasher::new());
@@ -12,6 +38,8 @@ pub extern "C" fn hasher_new() -> *mut HasherHandle {
     Box::into_raw(handle)
 }
 
+/// Writes data to the Hasher
+///
 /// # Safety
 ///
 /// Uses unsafe method calls
@@ -26,6 +54,8 @@ pub unsafe extern "C" fn hasher_write(handle: *mut HasherHandle, data: *const c_
     hasher.update(bytes);
 }
 
+/// Calculates the CRC32 checksum for data that's been written to the Hasher
+///
 /// # Safety
 ///
 /// Uses unsafe method calls
@@ -40,6 +70,7 @@ pub unsafe extern "C" fn hasher_finalize(handle: *mut HasherHandle) -> u32 {
     hasher.finalize()
 }
 
+/// Helper method to just calculate a CRC32 checksum directly for a string
 #[no_mangle]
 pub extern "C" fn crc32_hash(data: *const c_char, len: usize) -> u32 {
     if data.is_null() {

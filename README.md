@@ -18,6 +18,15 @@ See the [change log](CHANGELOG.md).
 
 Use the header file and library as you would normally when using a shared library in your language of choice.
 
+### PHP example
+```php
+/** \FFI $ffi */
+
+$hasher = $ffi->hasher_new();
+$ffi->hasher_write($hasher, 'hello world!', 12);
+$checksum = $ffi->hasher_finalize($hasher); // 0x03b4c26d
+```
+
 ## References
 
 - [crc32fast](https://github.com/srijs/rust-crc32fast) - The underlying Rust library which implemented this SIMD-accelerated approach.
