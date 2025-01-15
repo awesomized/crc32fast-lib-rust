@@ -20,4 +20,5 @@ strip = true
 cbindgen = "0.27.0"
 
 [lib]
-crate-type = ["lib", "cdylib"]
+name = "crc32fast"
+crate-type = ["cdylib"]
