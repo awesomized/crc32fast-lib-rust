@@ -87,6 +87,8 @@ pub extern "C" fn crc32_hash(data: *const c_char, len: usize) -> u32 {
 mod tests {
     use super::*;
     use std::ptr;
+    use std::fs::{read, write};
+    extern crate cbindgen;
 
     #[test]
     fn test_hasher_lifecycle() {
@@ -143,5 +145,27 @@ mod tests {
             let direct_sum = crc32_hash(data.as_ptr() as *const c_char, data.len());
             assert_eq!(sum, direct_sum, "Incremental update failed");
         }
+    }
+
+    #[test]
+    fn test_crc32fast_bindings() -> Result<(), String> {
+        const BINDING: &str = "crc32fast.h";
+        let crate_dir = std::env::var("CARGO_MANIFEST_DIR").map_err(|error| error.to_string())?;
+
+        let mut expected = Vec::new();
+        cbindgen::generate(crate_dir)
+            .map_err(|error| error.to_string())?
+            .write(&mut expected);
+
+        let actual = read(BINDING).map_err(|error| error.to_string())?;
+
+        if expected != actual {
+            write(BINDING, expected).map_err(|error| error.to_string())?;
+            return Err(format!(
+                "{BINDING} is not up-to-date, commit the generated file and try again"
+            ));
+        }
+
+        Ok(())
     }
 }
