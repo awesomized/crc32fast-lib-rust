@@ -1,6 +1,6 @@
 [package]
 name = "crc32fast-lib"
-version = "1.0.1"
+version = "1.1.2"
 edition = "2021"
 authors = ["Don MacAskill"]
 keywords = ["crc", "crc32", "simd", "checksum", "nvme"]
