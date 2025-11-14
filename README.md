@@ -1,3 +1,11 @@
+# ⚠️ DEPRECATED - No Longer Maintained
+
+This project is no longer under active development and has been archived.
+
+**We recommend using [crc-fast-rust](https://github.com/awesomized/crc-fast-rust) instead**, which offers better performance, more features, and active maintenance.
+
+---
+
 # crc32fast-lib
 
 [![Tests](https://github.com/awesomized/crc32fast-lib-rust/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/awesomized/crc32fast-lib-rust/actions/workflows/tests.yml)
